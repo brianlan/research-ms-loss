@@ -4,6 +4,7 @@
 # Contact: github@malong.com
 #
 # This source code is licensed under the LICENSE file in the root directory of this source tree.
+import importlib
 
 from torch.utils.data import DataLoader
 
@@ -15,8 +16,9 @@ from .transforms import build_transforms
 
 def build_data(cfg, is_train=True):
     transforms = build_transforms(cfg, is_train=is_train)
+    dataset_class = getattr(importlib.import_module("ret_benchmark.data.datasets"), cfg.DATA.DATASET_CLASS)
     if is_train:
-        dataset = BaseDataSet(cfg.DATA.TRAIN_IMG_SOURCE, transforms=transforms, mode=cfg.INPUT.MODE)
+        dataset = dataset_class(cfg.DATA.TRAIN_IMG_SOURCE, transforms=transforms, mode=cfg.INPUT.MODE, label_map_path=cfg.DATA.LABEL_MAP_PATH)
         sampler = RandomIdentitySampler(dataset=dataset,
                                         batch_size=cfg.DATA.TRAIN_BATCHSIZE,
                                         num_instances=cfg.DATA.NUM_INSTANCES,
@@ -29,7 +31,7 @@ def build_data(cfg, is_train=True):
                                  pin_memory=True
                                  )
     else:
-        dataset = BaseDataSet(cfg.DATA.TEST_IMG_SOURCE, transforms=transforms, mode=cfg.INPUT.MODE)
+        dataset = dataset_class(cfg.DATA.TEST_IMG_SOURCE, transforms=transforms, mode=cfg.INPUT.MODE, label_map_path=cfg.DATA.LABEL_MAP_PATH)
         data_loader = DataLoader(dataset,
                                  collate_fn=collate_fn,
                                  shuffle=False,

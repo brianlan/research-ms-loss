@@ -19,7 +19,7 @@ from ret_benchmark.utils.checkpoint import Checkpointer
 
 
 def train(cfg):
-    logger = setup_logger(name='Train', level=cfg.LOGGER.LEVEL)
+    logger = setup_logger(name="Train", level=cfg.LOGGER.LEVEL)
     logger.info(cfg)
     model = build_model(cfg)
     device = torch.device(cfg.MODEL.DEVICE)
@@ -54,7 +54,7 @@ def train(cfg):
         device,
         checkpoint_period,
         arguments,
-        logger
+        logger,
     )
 
 
@@ -62,17 +62,14 @@ def parse_args():
     """
   Parse input arguments
   """
-    parser = argparse.ArgumentParser(description='Train a retrieval network')
+    parser = argparse.ArgumentParser(description="Train a retrieval network")
     parser.add_argument(
-        '--cfg',
-        dest='cfg_file',
-        help='config file',
-        default=None,
-        type=str)
+        "--cfg", dest="cfg_file", help="config file", default=None, type=str
+    )
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     args = parse_args()
     cfg.merge_from_file(args.cfg_file)
     train(cfg)

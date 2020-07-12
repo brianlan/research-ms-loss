@@ -5,4 +5,4 @@
 #
 # This source code is licensed under the LICENSE file in the root directory of this source tree.
 
-from .base_dataset import BaseDataSet
+from .base_dataset import BaseDataSet, RetailDataset

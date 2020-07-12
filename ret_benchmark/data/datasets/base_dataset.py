@@ -19,7 +19,7 @@ class BaseDataSet(Dataset):
     img_source: list of img_path and label
     """
 
-    def __init__(self, img_source, transforms=None, mode="RGB"):
+    def __init__(self, img_source, transforms=None, mode="RGB", **kwargs):
         self.mode = mode
         self.transforms = transforms
         self.root = os.path.dirname(img_source)
@@ -62,3 +62,25 @@ class BaseDataSet(Dataset):
         if self.transforms is not None:
             img = self.transforms(img)
         return img, label
+
+
+class RetailDataset(BaseDataSet):
+    def __init__(self, img_source, label_map_path="", transforms=None, mode="RGB", **kwargs):
+        """This class is derived from BaseDataSet, with only a few difference in dealing with
+        data paths and labels.
+
+        Args:
+            img_source (str): path to the data indices flat file, each row contains abs_path and label string.
+            label_map (str): path to the label map file, each row is a unique label
+        """
+        with open(label_map_path) as f: 
+            self.label_map = [l.strip() for l in f]
+        super().__init__(img_source, transforms=transforms, mode=mode, **kwargs)
+        self.root = ""
+
+    def _build_label_index_dict(self):
+        """Will transform label string into naturally incrementing IDs (int)
+        """
+        # _mapping = sorted(set(self.label_list))
+        self.label_list = [self.label_map.index(l) for l in self.label_list]
+        return super()._build_label_index_dict()

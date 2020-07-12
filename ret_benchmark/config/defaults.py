@@ -52,6 +52,8 @@ _C.LOSSES.MARGIN_LOSS.UPPER_CUTOFF = 1.4
 
 # Data option
 _C.DATA = CN()
+_C.DATA.DATASET_CLASS = "BaseDataSet"
+_C.DATA.LABEL_MAP_PATH = ""
 _C.DATA.TRAIN_IMG_SOURCE = 'resource/datasets/CUB_200_2011/train.txt'
 _C.DATA.TEST_IMG_SOURCE = 'resource/datasets/CUB_200_2011/test.txt'
 _C.DATA.TRAIN_BATCHSIZE = 70
