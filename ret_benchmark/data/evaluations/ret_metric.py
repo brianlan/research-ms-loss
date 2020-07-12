@@ -13,13 +13,13 @@ class RetMetric(object):
 
         if len(feats) == 2 and type(feats) == list:
             """
-            feats = [gallery_feats, query_feats]
-            labels = [gallery_labels, query_labels]
+            feats = [query_feats, gallery_feats]
+            labels = [query_labels, gallery_labels]
             """
             self.is_equal_query = False
 
-            self.gallery_feats, self.query_feats = feats
-            self.gallery_labels, self.query_labels = labels
+            self.query_feats, self.gallery_feats = feats
+            self.query_labels, self.gallery_labels = labels
 
         else:
             self.is_equal_query = True

@@ -21,7 +21,7 @@ def do_train(
         cfg,
         model,
         train_loader,
-        val_loader,
+        query_loader,
         optimizer,
         scheduler,
         criterion,
@@ -29,7 +29,8 @@ def do_train(
         device,
         checkpoint_period,
         arguments,
-        logger
+        logger,
+        gallery_loader=None
 ):
     logger.info("Start training")
     meters = MetricLogger(delimiter="  ")
@@ -46,11 +47,14 @@ def do_train(
         if iteration % cfg.VALIDATION.VERBOSE == 0 or iteration == max_iter:
             model.eval()
             logger.info('Validation')
-            labels = val_loader.dataset.label_list
-            labels = np.array([int(k) for k in labels])
-            feats = feat_extractor(model, val_loader, logger=logger)
-
+            feats, labels = [], []
+            labels.append(np.array([int(k) for k in query_loader.dataset.label_list]))
+            feats.append(feat_extractor(model, query_loader, logger=logger))
+            if gallery_loader is not None:
+                labels.append(np.array([int(k) for k in gallery_loader.dataset.label_list]))
+                feats.append(feat_extractor(model, gallery_loader, logger=logger))
             ret_metric = RetMetric(feats=feats, labels=labels)
+            logger.info(f"Validate on query set only: {ret_metric.is_equal_query}")
             recall_curr = ret_metric.recall_k(1)
 
             if recall_curr > best_recall:

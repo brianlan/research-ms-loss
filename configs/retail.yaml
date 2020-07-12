@@ -26,7 +26,8 @@ DATA:
   DATASET_CLASS: "RetailDataset"
   LABEL_MAP_PATH: /data2/datasets/clobotics/embedding/indices/inedailysampling20200706_ccth_r5_png_r6_chinadrink_r7_class_list.txt
   TRAIN_IMG_SOURCE: /data2/datasets/clobotics/embedding/indices/ccth_r5_png_r6_chinadrink_r7.txt
-  TEST_IMG_SOURCE: /data2/datasets/clobotics/embedding/testsets/ine-daily-sampling-20200706/query.txt
+  TEST_QUERY_IMG_SOURCE: /data2/datasets/clobotics/embedding/testsets/ine-daily-sampling-20200706/query.txt
+  TEST_GALLERY_IMG_SOURCE: /data2/datasets/clobotics/embedding/testsets/ine-daily-sampling-20200706/gallery_distractor.txt
   TRAIN_BATCHSIZE: 96
   TEST_BATCHSIZE: 256
   NUM_WORKERS: 8

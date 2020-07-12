@@ -30,11 +30,14 @@ def train(cfg):
     optimizer = build_optimizer(cfg, model)
     scheduler = build_lr_scheduler(cfg, optimizer)
 
-    train_loader = build_data(cfg, is_train=True)
-    val_loader = build_data(cfg, is_train=False)
-
+    train_loader = build_data(cfg, cfg.DATA.TRAIN_IMG_SOURCE, is_train=True)
+    query_loader = build_data(cfg, cfg.DATA.TEST_QUERY_IMG_SOURCE, is_train=False)
     logger.info(train_loader.dataset)
-    logger.info(val_loader.dataset)
+    logger.info(query_loader.dataset)
+    gallery_loader = None
+    if cfg.DATA.TEST_GALLERY_IMG_SOURCE:
+        gallery_loader = build_data(cfg, cfg.DATA.TEST_GALLERY_IMG_SOURCE, is_train=False)
+        logger.info(gallery_loader.dataset)
 
     arguments = dict()
     arguments["iteration"] = 0
@@ -46,7 +49,7 @@ def train(cfg):
         cfg,
         model,
         train_loader,
-        val_loader,
+        query_loader,
         optimizer,
         scheduler,
         criterion,
@@ -55,6 +58,7 @@ def train(cfg):
         checkpoint_period,
         arguments,
         logger,
+        gallery_loader=gallery_loader,
     )
 
 
