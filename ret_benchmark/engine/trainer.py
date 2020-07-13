@@ -72,8 +72,6 @@ def do_train(
         iteration = iteration + 1
         arguments["iteration"] = iteration
 
-        scheduler.step()
-
         images = images.to(device)
         targets = torch.stack([target.to(device) for target in targets])
 
@@ -81,7 +79,9 @@ def do_train(
         loss = criterion(feats, targets)
         optimizer.zero_grad()
         loss.backward()
+
         optimizer.step()
+        scheduler.step()
 
         batch_time = time.time() - end
         end = time.time()
