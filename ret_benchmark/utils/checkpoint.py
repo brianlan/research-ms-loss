@@ -1,5 +1,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 import logging
+from pathlib import Path
 import os
 
 import torch
@@ -24,6 +25,8 @@ class Checkpointer(object):
         if logger is None:
             logger = logging.getLogger(__name__)
         self.logger = logger
+        if self.save_dir:
+            Path(self.save_dir).mkdir(parents=True, exist_ok=True)
 
     def save(self, name):
         if not self.save_dir:
